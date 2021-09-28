@@ -35,9 +35,11 @@ const InputForm = ({
 }) => {
   const classes = useStyles();
   const queryClient = useQueryClient();
+  // @ts-ignore
   const { mutate } = useMutation(createLogEntry, {
     onSuccess: () => {
-      queryClient.invalidateQueries("logs");
+      queryClient.invalidateQueries("logEntries");
+      uiStore.toggleLoading();
     },
   });
 
@@ -55,7 +57,6 @@ const InputForm = ({
     e.preventDefault();
     uiStore.toggleLoading();
     mutate();
-    uiStore.toggleLoading();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
