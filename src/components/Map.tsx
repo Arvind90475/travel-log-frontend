@@ -1,11 +1,12 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import LocationMarker from "./LocationMarker";
+import "leaflet/dist/leaflet.css";
 import LogEntryDescriptionCard from "./LogEntryDescriptionCard";
 import { useFetchLogEntries } from "../helpers/hooks/useFetchLogEntries";
 
 const tileurl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const tileAttribution =
-  '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // @ts-ignore
 function Map({ clientLocation }) {

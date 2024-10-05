@@ -16,7 +16,7 @@ export default function LocationMarker() {
   return position ? (
     <>
       <Marker position={position}></Marker>
-      <Popup position={position} onClose={onClose}>
+      <Popup position={position} eventHandlers={{ popupclose: onClose }}>
         <InputForm onClose={onClose} position={position} />
       </Popup>
     </>
