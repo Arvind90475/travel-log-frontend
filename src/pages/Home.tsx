@@ -1,12 +1,19 @@
-import { useState } from "react";
-import App from "../App";
-import LoginForm from "../components/LoginForm";
-import { IUser } from "../helpers/interfaces";
+import Map from "../components/Map";
+import LoadingSpinner from "../components/LoadingSpinner";
+import useGeoLocation from "../helpers/hooks/use_geo_location";
 
-const HomePage = () => {
-  const [user, setUser] = useState<IUser>();
+const Home = () => {
+  const { isLoading, location: clientLocation } = useGeoLocation();
 
-  return <>{user ? <App /> : <LoginForm setUser={setUser} />}</>;
+  return (
+    <div className="app">
+      {!isLoading && clientLocation ? (
+        <Map clientLocation={clientLocation} />
+      ) : (
+        <LoadingSpinner />
+      )}
+    </div>
+  );
 };
 
-export default HomePage;
+export default Home;

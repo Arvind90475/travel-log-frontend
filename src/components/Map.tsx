@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import LocationMarker from "./LocationMarker";
 import "leaflet/dist/leaflet.css";
 import LogEntryDescriptionCard from "./LogEntryDescriptionCard";
-import { useFetchLogEntries } from "../helpers/hooks/useFetchLogEntries";
+import { useFetchLogEntries } from "../helpers/hooks/use_fetch_log_entries";
 
 const tileurl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const tileAttribution =

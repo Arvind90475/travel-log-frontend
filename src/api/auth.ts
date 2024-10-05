@@ -7,3 +7,10 @@ export async function login<T>(user: Partial<IUser>): Promise<T | string> {
   });
   return data;
 }
+
+export async function register<T>(user: Partial<IUser>): Promise<T | string> {
+  const { data } = await http.post("/auth/signup", user, {
+    withCredentials: true,
+  });
+  return data;
+}

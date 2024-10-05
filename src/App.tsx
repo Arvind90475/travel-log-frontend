@@ -1,18 +1,20 @@
 import "./App.css";
-import UseLocation from "./helpers/hooks/UseLocation";
-import Map from "./components/Map";
-import LoadingSpinner from "./components/LoadingSpinner";
+import AuthProvider from "./context/authProvider";
+import { AppRoutes } from "./Routing/AppRoutes";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 function App() {
-  const { isLoading, location: clientLocation } = UseLocation();
   return (
-    <div className="app">
-      {!isLoading && clientLocation ? (
-        <Map clientLocation={clientLocation} />
-      ) : (
-        <LoadingSpinner />
-      )}
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 

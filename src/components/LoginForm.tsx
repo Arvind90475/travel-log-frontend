@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginForm({ setUser }: { setUser: Function }) {
+export default function LoginForm({ onComplete }: { onComplete: () => void }) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [userCredentials, setUserCredentials] = useState<{
@@ -59,9 +59,7 @@ export default function LoginForm({ setUser }: { setUser: Function }) {
       body: JSON.stringify(userCredentials),
     });
     const authenticatedUser: IUser = await response.json();
-    console.log(authenticatedUser);
-    setUser(authenticatedUser);
-    handleClose();
+    onComplete();
   };
 
   return (

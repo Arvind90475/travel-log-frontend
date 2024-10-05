@@ -2,7 +2,7 @@ import { ILogEntry } from "../helpers/interfaces";
 import http from "./http-common";
 
 export async function getAll<T>(endPoint: string): Promise<T> {
-  const { data } = await http.get(`/${endPoint}`, { withCredentials: true });
+  const { data, status } = await http.get(`/${endPoint}`, { withCredentials: true });
   return data;
 }
 
