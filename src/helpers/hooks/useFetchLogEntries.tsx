@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getAll } from "src/api/logEntries";
+import { getAll } from "../../api/logEntries";
 import { ILogEntry } from "../interfaces";
 
 export const useFetchLogEntries = () =>

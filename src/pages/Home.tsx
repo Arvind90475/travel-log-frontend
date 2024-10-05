@@ -1,7 +1,7 @@
 import { useState } from "react";
-import App from "src/App";
-import LoginForm from "src/components/LoginForm";
-import { IUser } from "src/helpers/interfaces";
+import App from "../App";
+import LoginForm from "../components/LoginForm";
+import { IUser } from "../helpers/interfaces";
 
 const HomePage = () => {
   const [user, setUser] = useState<IUser>();

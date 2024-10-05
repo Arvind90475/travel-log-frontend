@@ -1,4 +1,4 @@
-import { ILogEntry } from "src/helpers/interfaces";
+import { ILogEntry } from "../helpers/interfaces";
 import http from "./http-common";
 
 export async function getAll<T>(endPoint: string): Promise<T> {

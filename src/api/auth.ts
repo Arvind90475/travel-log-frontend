@@ -1,4 +1,4 @@
-import { IUser } from "src/helpers/interfaces";
+import { IUser } from "../helpers/interfaces";
 import http from "./http-common";
 
 export async function login<T>(user: Partial<IUser>): Promise<T | string> {

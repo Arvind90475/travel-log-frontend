@@ -4,7 +4,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { Button, TextField } from "@material-ui/core";
-import { IUser } from "src/helpers/interfaces";
+import { IUser } from "../helpers/interfaces";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
