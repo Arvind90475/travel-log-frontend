@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-type LocationType = Pick<GeolocationCoordinates, 'latitude' | 'longitude'>
+export type LocationType = Pick<GeolocationCoordinates, 'latitude' | 'longitude'>
 const getGeoLocation = (): Promise<LocationType> => {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(

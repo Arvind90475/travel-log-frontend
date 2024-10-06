@@ -2,7 +2,7 @@ import { LatLngExpression } from "leaflet";
 
 export interface ILogEntry {
   location: {
-    coordinates: LatLngExpression | [number];
+    coordinates: [number, number];
     type: "Point";
   };
   rating: number;

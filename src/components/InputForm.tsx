@@ -1,30 +1,15 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { observer } from "mobx-react";
 import { LatLngExpression } from "leaflet";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-
-import LoadingSpinner from "./LoadingSpinner";
-import { uiStore } from "../store";
 import { postOne } from "../api/logEntries";
 import { ILogEntry } from "../helpers/interfaces";
+import LoadingSpinner from "./LoadingSpinner";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    wrap: {
-      maxHeight: "500px",
-      height: "380px",
-    },
-    root: {
-      height: "fit-content",
-      "& > *": {
-        margin: theme.spacing(2),
-      },
-    },
-  })
-);
+interface LogEntryState {
+  title: string;
+  description: string;
+  visitDate: string;
+}
 
 const InputForm = ({
   onClose,
@@ -33,21 +18,18 @@ const InputForm = ({
   onClose: Function;
   position: LatLngExpression;
 }) => {
-  const classes = useStyles();
   const queryClient = useQueryClient();
-  // @ts-ignore
-  const { mutate } = useMutation(createLogEntry, {
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["createLogEntry"],
+    mutationFn: (logEntry: LogEntryState) => createLogEntry(logEntry),
     onSuccess: () => {
-      queryClient.invalidateQueries("logEntries");
-      uiStore.toggleLoading();
+      onClose();
+      queryClient.invalidateQueries({ queryKey: ["logEntries"] });
     },
+    retry: false,
   });
 
-  const [logEntry, setLogEntry] = useState<{
-    title: string;
-    description: string;
-    visitDate: string;
-  }>({
+  const [logEntry, setLogEntry] = useState<LogEntryState>({
     title: "",
     description: "",
     visitDate: "",
@@ -55,72 +37,90 @@ const InputForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    uiStore.toggleLoading();
-    mutate();
+    mutate(logEntry);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLogEntry({
-      ...logEntry,
-      [e.target.name]: e.target.value,
+    setLogEntry((prevLogEntry) => {
+      return {
+        ...prevLogEntry,
+        [e.target.name]: e.target.value,
+      };
     });
   };
 
-  async function createLogEntry() {
-    const newLog: Partial<ILogEntry> = {
+  function createLogEntry(logEntry: LogEntryState) {
+    return postOne<ILogEntry>({
       ...logEntry,
       location: {
         type: "Point",
-        coordinates: Object.values(position) as [number],
+        coordinates: Object.values(position) as [number, number],
       },
-    };
-
-    await postOne<ILogEntry>(newLog);
-    onClose();
+    });
   }
+
   return (
-    <div className={classes.wrap}>
-      {uiStore.isLoading ? (
+    <div className="p-4 max-w-md mx-auto bg-gray-800 text-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+      {isPending ? (
         <LoadingSpinner />
       ) : (
-        <form className={classes.root} onSubmit={handleSubmit}>
-          <h1>Add a new entry</h1>
-          <TextField
-            name="title"
-            variant="outlined"
-            label="Title"
-            onChange={handleChange}
-            value={logEntry.title}
-          />
-          <TextField
-            name="description"
-            variant="outlined"
-            label="Description"
-            onChange={handleChange}
-            value={logEntry.description}
-          />
-          <TextField
-            id="visitDate"
-            name="visitDate"
-            label="Visited Date"
-            type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            onChange={handleChange}
-            value={logEntry.visitDate}
-          />
-          <Button variant="contained" component="label">
-            Upload Image
-            <input type="file" hidden />
-          </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
+        <form onSubmit={handleSubmit}>
+          <h1 className="text-2xl font-bold mb-4">Add a new entry</h1>
+          <div className="mb-4">
+            <label
+              className="block text-gray-300 text-sm font-bold mb-2"
+              htmlFor="title"
+            >
+              Title
+            </label>
+            <input
+              name="title"
+              type="text"
+              className="input input-bordered w-full bg-gray-700 text-white"
+              onChange={handleChange}
+              value={logEntry.title}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-300 text-sm font-bold mb-2"
+              htmlFor="description"
+            >
+              Description
+            </label>
+            <input
+              name="description"
+              type="text"
+              className="input input-bordered w-full bg-gray-700 text-white"
+              onChange={handleChange}
+              value={logEntry.description}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-300 text-sm font-bold mb-2"
+              htmlFor="visitDate"
+            >
+              Visited Date
+            </label>
+            <input
+              id="visitDate"
+              name="visitDate"
+              type="date"
+              className="input input-bordered w-full bg-gray-700 text-white"
+              onChange={handleChange}
+              value={logEntry.visitDate}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </div>
         </form>
       )}
     </div>
   );
 };
 
-export default observer(InputForm);
+export default InputForm;

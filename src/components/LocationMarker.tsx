@@ -2,6 +2,7 @@ import { LatLngExpression } from "leaflet";
 import { useState } from "react";
 import { Marker, useMapEvent, Popup } from "react-leaflet";
 import InputForm from "./InputForm";
+import ModalComponent from "../ui/modal";
 
 export default function LocationMarker() {
   const [position, setPosition] = useState<LatLngExpression>();
@@ -16,7 +17,11 @@ export default function LocationMarker() {
   return position ? (
     <>
       <Marker position={position}></Marker>
-      <Popup position={position} eventHandlers={{ popupclose: onClose }}>
+      <Popup
+        className="wide-popup"
+        position={position}
+        eventHandlers={{ popupclose: onClose }}
+      >
         <InputForm onClose={onClose} position={position} />
       </Popup>
     </>

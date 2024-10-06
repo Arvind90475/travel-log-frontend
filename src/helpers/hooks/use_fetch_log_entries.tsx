@@ -9,4 +9,5 @@ export const useFetchLogEntries = () =>
       return getAll<ILogEntry[]>("logs");
     },
     retry: false,
+    retryOnMount: false,
   });

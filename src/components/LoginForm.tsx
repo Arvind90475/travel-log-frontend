@@ -1,114 +1,80 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import { Button, TextField } from "@material-ui/core";
-import { IUser } from "../helpers/interfaces";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/authProvider";
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "20px 0",
-  },
+const LoginForm = () => {
+  const { login, isLoggingIn, loginError } = useAuth();
 
-  flexChildren: {
-    margin: "15px 0",
-  },
-}));
-
-export default function LoginForm({ onComplete }: { onComplete: () => void }) {
-  const classes = useStyles();
-  const [open, setOpen] = useState(true);
-  const [userCredentials, setUserCredentials] = useState<{
-    email: string;
-    password: string;
-  }>({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserCredentials({
-      ...userCredentials,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleClose = () => {
-    setOpen(!open);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/v1/auth/login", {
-      method: "POST",
-      credentials: "include",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(userCredentials),
-    });
-    const authenticatedUser: IUser = await response.json();
-    onComplete();
+    const formData = new FormData(e.currentTarget);
+    const email: string = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    login(email, password);
   };
 
   return (
-    <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
+      <h1 className="text-3xl font-bold mb-6 text-white">Login</h1>
+      <div className="mb-4">
+        <Link
+          to="/register"
+          className="link link-primary text-center block text-white"
+        >
+          Already have an account? Sign Up
+        </Link>
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 p-6 rounded shadow-md w-full max-w-sm"
       >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <form className={classes.form} onSubmit={handleSubmit}>
-              <TextField
-                name="email"
-                className={classes.flexChildren}
-                id="outlined-textarea"
-                label="Email"
-                multiline
-                variant="outlined"
-                onChange={handleChange}
-              />
-              <TextField
-                name="password"
-                className={classes.flexChildren}
-                id="outlined-textarea"
-                label="Password"
-                multiline
-                variant="outlined"
-                onChange={handleChange}
-              />
-              <Button
-                className={classes.flexChildren}
-                type="submit"
-                variant="contained"
-                color="primary"
-              >
-                Login
-              </Button>
-            </form>
-          </div>
-        </Fade>
-      </Modal>
+        <div className="mb-4">
+          <label
+            className="block text-gray-300 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className="input input-bordered w-full bg-gray-700 text-white"
+            placeholder="Enter your email"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-300 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            className="input input-bordered w-full bg-gray-700 text-white"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div className="flex items-center justify-between mb-4">
+          <button
+            disabled={isLoggingIn}
+            type="submit"
+            className="btn btn-primary w-full"
+          >
+            Login
+          </button>
+        </div>
+        <div className="flex justify-between text-sm">
+          <Link to="/forgot-password" className="link link-primary text-white">
+            Forgot Password?
+          </Link>
+        </div>
+      </form>
     </div>
   );
-}
+};
+
+export default LoginForm;

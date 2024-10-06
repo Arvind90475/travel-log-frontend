@@ -1,9 +1,10 @@
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
 import { useAuth } from "../context/authProvider";
+import Home from "../pages/home";
+import Logout from "../pages/logout";
+import Register from "../pages/register";
+import Login from "../pages/login";
 
 export const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -14,8 +15,20 @@ export const AppRoutes = () => {
           path="/"
           element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={isAuthenticated ? <Navigate to="/" replace /> : <Register />}
+        />
+        <Route
+          path="/logout"
+          element={
+            isAuthenticated ? <Logout /> : <Navigate to="/login" replace />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

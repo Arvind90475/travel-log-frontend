@@ -14,3 +14,10 @@ export async function register<T>(user: Partial<IUser>): Promise<T | string> {
   });
   return data;
 }
+
+export async function logout<T extends string>(): Promise<T> {
+  const { data } = await http.post("/auth/logout", {}, {
+    withCredentials: true,
+  });
+  return data;
+}

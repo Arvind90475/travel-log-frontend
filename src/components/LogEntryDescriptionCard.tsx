@@ -1,33 +1,3 @@
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      maxWidth: 345,
-      marginTop: "50",
-    },
-    media: {
-      height: 0,
-      paddingTop: "56.25%", // 16:9
-    },
-    avatar: {
-      backgroundColor: red[500],
-    },
-  })
-);
-
 export default function LogEntryDescriptionCard({
   image,
   description,
@@ -35,43 +5,83 @@ export default function LogEntryDescriptionCard({
   image: string;
   description: string;
 }) {
-  const classes = useStyles();
   return (
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            T
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
+    <div className="card w-96 bg-base-100 shadow-xl mt-12">
+      <div className="card-header flex items-center justify-between p-4">
+        <div className="flex items-center">
+          <div className="avatar">
+            <div className="w-12 rounded-full bg-red-500 text-white flex items-center justify-center">
+              T
+            </div>
+          </div>
+          <div className="ml-4">
+            <h2 className="card-title">Shrimp and Chorizo Paella</h2>
+            <p className="text-sm text-gray-500">September 14, 2016</p>
+          </div>
+        </div>
+        <button className="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
       {image && (
-        <CardMedia
-          className={classes.media}
-          image={image}
-          title="Paella dish"
-        />
+        <figure>
+          <img
+            src={image}
+            alt="Paella dish"
+            className="w-full h-48 object-cover"
+          />
+        </figure>
       )}
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {description}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
+      <div className="card-body">
+        <p className="text-gray-700">{description}</p>
+      </div>
+      <div className="card-actions justify-end p-4">
+        <button className="btn btn-outline btn-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </button>
+        <button className="btn btn-outline btn-secondary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 10l4.5 4.5M15 10l-4.5 4.5M15 10V3m0 7h7"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   );
 }
